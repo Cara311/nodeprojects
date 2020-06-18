@@ -25,3 +25,28 @@
     .jumbotron .lang-logo img {
       max-width: 100%; }
 
+.card {
+  width: 48rem;
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-top: 12px;
+}
+
+.card-header {
+  background-color: blue;
+  color: white;
+  padding-left: 10px;
+}
+
+.card-body {
+  padding: 12px;
+}
+
+.price {
+  background-color: red;
+  color: white;
+}
+
+.btn a {
+  color: white;
+}

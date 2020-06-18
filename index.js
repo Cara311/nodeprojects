@@ -13,11 +13,7 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => res.render('pages/index'));
 
-// set up a rule that says requests to "/math" should be handled by the
-// handleMath function below
 app.get('/calc', getPrice);
-
-
 
 // start the server listening
 app.listen(port, function() {
@@ -30,7 +26,7 @@ app.listen(port, function() {
    * they are listed here.
    **********************************************************************/
   function getPrice(req, res) {
-    const weight = Number(req.query.weight);
+    const weight = Number(req.query.weight); 
     const type = req.query.type;
 
     calcPrice(res, weight, type);
@@ -55,7 +51,7 @@ app.listen(port, function() {
           price = 1.00;
         }
         else {
-          price = 'N/A';
+         response.render('pages/error');
         }
        
         break;
@@ -73,52 +69,54 @@ app.listen(port, function() {
           price = 0.95;
         }
         else {
-          price = 'N/A';
+          response.render('pages/error');
         }
        
         break;
       case 'Large Envelopes (Flats)':
-        switch(weight) {
-          case 1:
-            price = 1.00;
-            break;
-          case 2:
-            price = 1.20;
-            break;  
-          case 3:
-            price = 1.40;
-            break; 
-          case 4:
-            price = 1.60;
-            break;   
-          case 5:
-            price = 1.80;
-            break;
-          case 6:
-            price = 2.00;
-            break; 
-          case 7:
-            price = 2.20;
-            break;  
-          case 8:
-            price = 2.40;
-            break;    
-          case 9:
-            price = 2.60;
-            break;  
-          case 10:
-            price = 2.80;
-            break;
-          case 11:
-            price = 3.00;
-            break; 
-          case 12:
-            price = 3.20;
-            break;
-          case 13:
-            price = 3.40;
-            break;         
+        if (weight <= 1) {
+          price = 1.00;
+        } 
+        else if (weight <= 2){
+          price = 1.20;
         }
+        else if (weight <= 3){
+          price = 1.40;
+        }
+        else if (weight <= 4){
+          price = 1.60;
+        }
+        else if (weight <= 5){
+          price = 1.80;
+        }
+        else if (weight <= 6){
+          price = 2.00;
+        }
+        else if (weight <= 7){
+          price = 2.20;
+        }
+        else if (weight <= 8){
+          price = 2.40;
+        }
+        else if (weight <= 9){
+          price = 2.60;
+        }
+        else if (weight <= 10){
+          price = 2.80;
+        }
+        else if (weight <= 11){
+          price = 3.00;
+        }
+        else if (weight <= 12){
+          price = 3.20;
+        }
+        else if (weight <= 13){
+          price = 3.40;
+        }
+        else {
+          response.render('pages/error');
+        }
+        
           break;
         case 'First-Class Package Service—Retail':
         // code block
@@ -127,7 +125,9 @@ app.listen(port, function() {
         // code block
     } 
 
-    const params = {weight: weight, type: type, price: price};
+    ///Change price to show two decimal
+    var total = price.toFixed(2);
+    const params = {weight: weight, type: type, price: total};
     response.render('pages/result', params);
 
   }

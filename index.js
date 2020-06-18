@@ -15,7 +15,7 @@ app.get('/', (req, res) => res.render('pages/index'));
 
 // set up a rule that says requests to "/math" should be handled by the
 // handleMath function below
-app.get('/math', handleMath);
+app.get('/calc', getPrice);
 
 
 
@@ -29,40 +29,110 @@ app.listen(port, function() {
    * but for ease of reading this example and seeing all of the pieces
    * they are listed here.
    **********************************************************************/
-  
-  function handleMath(request, response) {
-    const operation = request.query.operation;
-    const operand1 = Number(request.query.operand1);
-    const operand2 = Number(request.query.operand2);
-  
-    // TODO: Here we should check to make sure we have all the correct parameters
-  
-    computeOperation(response, operation, operand1, operand2);
+  function getPrice(req, res) {
+    const weight = Number(req.query.weight);
+    const type = req.query.type;
+
+    calcPrice(res, weight, type);
   }
+
+  function calcPrice(response, weight, type) {
   
-  function computeOperation(response, op, left, right) {
-    op = op.toLowerCase();
-  
-    let result = 0;
-  
-    if (op == "add") {
-      result = left + right;
-    } else if (op == "subtract") {
-      result = left - right;		
-    } else if (op == "multiply") {
-      result = left * right;
-    } else if (op == "divide") {
-      result = left / right;
-    } else {
-      // It would be best here to redirect to an "unknown operation"
-      // error page or something similar.
-    }
-  
-    // Set up a JSON object of the values we want to pass along to the EJS result page
-    const params = {operation: op, left: left, right: right, result: result};
-  
-    // Render the response, using the EJS page "result.ejs" in the pages directory
-    // Makes sure to pass it the parameters we need.
+    let price = 0;
+
+    switch(type) {
+      case 'Letters (Stamped)':
+        if (weight <= 1) {
+          price = 0.55;
+        } 
+        else if (weight <= 2){
+          price = 0.70;
+        }
+        else if (weight <= 3){
+          price = 0.85;
+        }
+        else if (weight <= 3.5){
+          price = 1.00;
+        }
+        else {
+          price = 'N/A';
+        }
+       
+        break;
+      case 'Letters (Metered)':
+        if (weight <= 1) {
+          price = 0.50;
+        } 
+        else if (weight <= 2){
+          price = 0.65;
+        }
+        else if (weight <= 3){
+          price = 0.80;
+        }
+        else if (weight <= 3.5){
+          price = 0.95;
+        }
+        else {
+          price = 'N/A';
+        }
+       
+        break;
+      case 'Large Envelopes (Flats)':
+        switch(weight) {
+          case 1:
+            price = 1.00;
+            break;
+          case 2:
+            price = 1.20;
+            break;  
+          case 3:
+            price = 1.40;
+            break; 
+          case 4:
+            price = 1.60;
+            break;   
+          case 5:
+            price = 1.80;
+            break;
+          case 6:
+            price = 2.00;
+            break; 
+          case 7:
+            price = 2.20;
+            break;  
+          case 8:
+            price = 2.40;
+            break;    
+          case 9:
+            price = 2.60;
+            break;  
+          case 10:
+            price = 2.80;
+            break;
+          case 11:
+            price = 3.00;
+            break; 
+          case 12:
+            price = 3.20;
+            break;
+          case 13:
+            price = 3.40;
+            break;         
+        }
+          break;
+        case 'First-Class Package Service—Retail':
+        // code block
+        break;  
+      default:
+        // code block
+    } 
+
+    const params = {weight: weight, type: type, price: price};
     response.render('pages/result', params);
-  
+
   }
+
+
+
+
+  

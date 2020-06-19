@@ -119,10 +119,25 @@ app.listen(port, function() {
         
           break;
         case 'First-Class Package Service—Retail':
-        // code block
+          if (weight <= 4) {
+            price = 3.80;
+          } 
+          else if (weight <= 8){
+            price = 4.60;
+          }
+          else if (weight <= 3){
+            price = 1.40;
+          }
+          else if (weight <= 12){
+            price = 5.30;
+          }
+          else if (weight <= 13){
+            price = 5.90;
+          }
+          else {
+            response.render('pages/error');
+          }
         break;  
-      default:
-        // code block
     } 
 
     ///Change price to show two decimal

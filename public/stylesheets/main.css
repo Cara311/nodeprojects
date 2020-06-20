@@ -50,3 +50,7 @@
 .btn a {
   color: white;
 }
+
+#resultsCard {
+  display: none;
+}

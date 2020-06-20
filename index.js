@@ -14,6 +14,7 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
 
 app.get('/calc', getPrice);
+app.get('/calcJSON', getPriceJSON);
 
 // start the server listening
 app.listen(port, function() {
@@ -21,20 +22,29 @@ app.listen(port, function() {
 });
     
   /**********************************************************************
-   * Ideally the functions below here would go into a different file
-   * but for ease of reading this example and seeing all of the pieces
-   * they are listed here.
+   * Functions
    **********************************************************************/
   function getPrice(req, res) {
     const weight = Number(req.query.weight); 
     const type = req.query.type;
+    const button = 0;
 
-    calcPrice(res, weight, type);
+    calcPrice(res, weight, type, button);
   }
 
-  function calcPrice(response, weight, type) {
+  function getPriceJSON(req, res) {
+    const weight = Number(req.query.weight); 
+    const type = req.query.type;
+    const button = 1;
+
+    calcPrice(res, weight, type, button);
+  }
+
+
+  function calcPrice(response, weight, type, button) {
   
     let price = 0;
+    let error = 0;
 
     switch(type) {
       case 'Letters (Stamped)':
@@ -51,7 +61,7 @@ app.listen(port, function() {
           price = 1.00;
         }
         else {
-         response.render('pages/error');
+         error = 1;
         }
        
         break;
@@ -69,7 +79,7 @@ app.listen(port, function() {
           price = 0.95;
         }
         else {
-          response.render('pages/error');
+          error = 1;
         }
        
         break;
@@ -114,7 +124,7 @@ app.listen(port, function() {
           price = 3.40;
         }
         else {
-          response.render('pages/error');
+          error = 1;
         }
         
           break;
@@ -135,7 +145,7 @@ app.listen(port, function() {
             price = 5.90;
           }
           else {
-            response.render('pages/error');
+            error = 1;
           }
         break;  
     } 
@@ -143,9 +153,30 @@ app.listen(port, function() {
     ///Change price to show two decimal
     var total = price.toFixed(2);
     const params = {weight: weight, type: type, price: total};
-    response.render('pages/result', params);
+    const errorJ = {error: "Not a valid weight for this package type"};
+
+  if(button === 1 && error === 0) {
+      response.setHeader('Content-Type', 'application/json');
+      response.end(JSON.stringify(params));
+  } else if(button === 0 && error === 0) {
+      response.setHeader('Content-Type', 'text/html');
+      response.render("pages/result", params);
+  } else if(button === 1 && error === 1) {
+      response.setHeader('Content-Type', 'application/json');
+      response.end(JSON.stringify(errorJ));
+
+  } else {
+    response.setHeader('Content-Type', 'text/html');
+    response.render('pages/error');
+  } 
+
+
+
+   // response.render('pages/result', params);
 
   }
+
+
 
 
 
